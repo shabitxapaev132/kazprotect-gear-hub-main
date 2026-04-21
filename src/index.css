@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* KAZPROTECT Design System — premium industrial. All colors HSL. */
+
+@layer base {
+  :root {
+    --background: 220 30% 98%;
+    --foreground: 220 45% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 45% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 45% 12%;
+
+    /* Brand: Deep Navy #1a2744 */
+    --primary: 220 45% 19%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 220 45% 25%;
+
+    /* Brand: Gold Accent #c9a84c */
+    --secondary: 43 53% 54%;
+    --secondary-foreground: 220 45% 12%;
+    --secondary-hover: 43 53% 48%;
+
+    --muted: 220 20% 95%;
+    --muted-foreground: 220 15% 40%;
+
+    --accent: 43 53% 54%;
+    --accent-foreground: 220 45% 12%;
+
+    --destructive: 0 75% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 20% 88%;
+    --input: 220 20% 88%;
+    --ring: 43 53% 54%;
+
+    --radius: 0.625rem;
+
+    /* Brand tokens */
+    --brand-navy: 220 45% 19%;
+    --brand-navy-deep: 220 50% 11%;
+    --brand-gold: 43 53% 54%;
+    --brand-gold-light: 43 60% 70%;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(220 50% 11%) 0%, hsl(220 45% 19%) 60%, hsl(220 40% 25%) 100%);
+    --gradient-navy: linear-gradient(180deg, hsl(220 45% 19%) 0%, hsl(220 50% 14%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(43 60% 60%) 0%, hsl(43 53% 48%) 100%);
+    --gradient-overlay: linear-gradient(180deg, hsl(220 50% 11% / 0.3) 0%, hsl(220 50% 11% / 0.92) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(220 30% 98%) 100%);
+
+    /* Shadows */
+    --shadow-elegant: 0 10px 30px -10px hsl(220 50% 11% / 0.25);
+    --shadow-gold: 0 8px 24px -8px hsl(43 53% 54% / 0.45);
+    --shadow-card: 0 1px 3px hsl(220 50% 11% / 0.08), 0 8px 24px -12px hsl(220 50% 11% / 0.12);
+    --shadow-hover: 0 20px 40px -15px hsl(220 50% 11% / 0.3);
+
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 220 50% 8%;
+    --foreground: 0 0% 98%;
+    --card: 220 45% 12%;
+    --card-foreground: 0 0% 98%;
+    --popover: 220 45% 12%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 43 53% 54%;
+    --primary-foreground: 220 50% 11%;
+    --secondary: 220 30% 20%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 220 30% 18%;
+    --muted-foreground: 220 15% 65%;
+    --accent: 43 53% 54%;
+    --accent-foreground: 220 50% 11%;
+    --border: 220 30% 22%;
+    --input: 220 30% 22%;
+    --ring: 43 53% 54%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: 'Manrope', 'Inter', sans-serif;
+    @apply tracking-tight;
+  }
+}
+
+@layer utilities {
+  .bg-gradient-hero { background: var(--gradient-hero); }
+  .bg-gradient-navy { background: var(--gradient-navy); }
+  .bg-gradient-gold { background: var(--gradient-gold); }
+  .bg-gradient-overlay { background: var(--gradient-overlay); }
+  .bg-gradient-card { background: var(--gradient-card); }
+
+  .shadow-elegant { box-shadow: var(--shadow-elegant); }
+  .shadow-gold { box-shadow: var(--shadow-gold); }
+  .shadow-card { box-shadow: var(--shadow-card); }
+  .shadow-hover { box-shadow: var(--shadow-hover); }
+
+  .transition-smooth { transition: var(--transition-smooth); }
+  .transition-spring { transition: var(--transition-spring); }
+
+  .text-gradient-gold {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Subtle grid pattern for backgrounds */
+  .bg-grid-pattern {
+    background-image:
+      linear-gradient(hsl(var(--brand-gold) / 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--brand-gold) / 0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+}
+
+/* Reveal-on-scroll animation */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
