@@ -2,6 +2,7 @@ type TelegramPayload = {
   name: string;
   phone: string;
   product: string;
+  email?: string;
 };
 
 export async function sendToTelegram(payload: TelegramPayload) {
@@ -31,11 +32,12 @@ export function getTelegramPayloadFromForm(form: HTMLFormElement): TelegramPaylo
   const name = String(fd.get("name") ?? "").trim();
   const phone = String(fd.get("phone") ?? "").trim();
   const product = String(fd.get("product") ?? "").trim();
+  const email = String(fd.get("email") ?? "").trim();
 
   if (!name) throw new Error("Поле «Имя» обязательно");
   if (!phone) throw new Error("Поле «Телефон» обязательно");
   if (!product) throw new Error("Поле «Товар» обязательно");
 
-  return { name, phone, product };
+  return { name, phone, product, ...(email ? { email } : {}) };
 }
 

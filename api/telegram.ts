@@ -2,6 +2,7 @@ type TelegramRequestBody = {
   name?: unknown;
   phone?: unknown;
   product?: unknown;
+  email?: unknown;
 };
 
 function asNonEmptyString(value: unknown) {
@@ -32,6 +33,7 @@ export default async function handler(req: any, res: any) {
   const name = asNonEmptyString(body.name);
   const phone = asNonEmptyString(body.phone);
   const product = asNonEmptyString(body.product);
+  const email = asNonEmptyString(body.email);
 
   if (!name || !phone || !product) {
     res.status(400).json({ ok: false, error: "Missing required fields" });
@@ -43,6 +45,7 @@ export default async function handler(req: any, res: any) {
     "",
     `Имя: ${escapeText(name)}`,
     `Телефон: ${escapeText(phone)}`,
+    `Email: ${email ? escapeText(email) : "Не указан"}`,
     `Товар: ${escapeText(product)}`,
   ].join("\n");
 
