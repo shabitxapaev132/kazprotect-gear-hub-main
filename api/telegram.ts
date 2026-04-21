@@ -1,22 +1,12 @@
-type TelegramRequestBody = {
-  name?: unknown;
-  phone?: unknown;
-  product?: unknown;
-  email?: unknown;
-  company?: unknown;
-  message?: unknown;
-};
+declare const process: { env: Record<string, string | undefined> };
 
-function asNonEmptyString(value: unknown) {
-  if (typeof value !== "string") return null;
-  const trimmed = value.trim();
-  return trimmed.length > 0 ? trimmed : null;
+function asTrimmedString(value: unknown): string {
+  return typeof value === "string" ? value.trim() : String(value ?? "").trim();
 }
 
-function asOptionalString(value: unknown) {
-  if (typeof value !== "string") return null;
-  const trimmed = value.trim();
-  return trimmed.length > 0 ? trimmed : null;
+function valueOrNotSpecified(value: unknown): string {
+  const s = asTrimmedString(value);
+  return s ? s : "Не указано";
 }
 
 function escapeText(text: string) {
@@ -37,31 +27,30 @@ export default async function handler(req: any, res: any) {
     return;
   }
 
-  const body = (req.body ?? {}) as TelegramRequestBody;
-  const name = asNonEmptyString(body.name);
-  const phone = asNonEmptyString(body.phone);
-  const product = asNonEmptyString(body.product);
-  const company = asOptionalString(body.company);
-  const email = asOptionalString(body.email);
-  const message = asOptionalString(body.message);
+  const body = req.body ?? {};
 
-  if (!name || !phone || !product) {
+  // name/phone считаем обязательными (как и в формах), остальное — опционально.
+  const name = asTrimmedString(body.name);
+  const phone = asTrimmedString(body.phone);
+
+  if (!name || !phone) {
     res.status(400).json({ ok: false, error: "Missing required fields" });
     return;
   }
 
-  const companyText = company ? escapeText(company) : "Не указано";
-  const emailText = email ? escapeText(email) : "Не указано";
-  const messageText = message ? escapeText(message) : "Не указано";
+  const company = valueOrNotSpecified(body.company);
+  const email = valueOrNotSpecified(body.email);
+  const product = valueOrNotSpecified(body.product);
+  const message = valueOrNotSpecified(body.message ?? body.task ?? body.comment);
 
   const text = [
     "🚀 НОВАЯ ЗАЯВКА KAZPROTECT",
     `👤 Имя: ${escapeText(name)}`,
     `📞 Телефон: ${escapeText(phone)}`,
-    `🏢 Компания: ${companyText}`,
-    `📧 Email: ${emailText}`,
+    `🏢 Компания: ${escapeText(company)}`,
+    `📧 Email: ${escapeText(email)}`,
     `📦 Товар/Интерес: ${escapeText(product)}`,
-    `📝 Задача/Детали: ${messageText}`,
+    `📝 Задача/Детали: ${escapeText(message)}`,
   ].join("\n");
 
   try {
@@ -74,21 +63,13 @@ export default async function handler(req: any, res: any) {
       }),
     });
 
-    const tgData = (await tgRes.json().catch(() => null)) as
-      | { ok: true; result: unknown }
-      | { ok: false; description?: string }
-      | null;
-
-    if (!tgRes.ok || !tgData || (typeof tgData === "object" && "ok" in tgData && tgData.ok !== true)) {
-      const details =
-        tgData && typeof tgData === "object" && "description" in tgData ? tgData.description : undefined;
-      res.status(502).json({ ok: false, error: details ?? "Telegram request failed" });
+    if (!tgRes.ok) {
+      res.status(502).json({ ok: false, error: "Telegram request failed" });
       return;
     }
 
     res.status(200).json({ ok: true });
-  } catch {
+  } catch (err) {
     res.status(502).json({ ok: false, error: "Telegram request failed" });
   }
 }
-
