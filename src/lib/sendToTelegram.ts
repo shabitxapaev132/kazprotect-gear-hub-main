@@ -1,11 +1,13 @@
-type TelegramPayload = {
+export type TelegramLeadPayload = {
   name: string;
   phone: string;
   product: string;
+  company?: string;
   email?: string;
+  message?: string;
 };
 
-export async function sendToTelegram(payload: TelegramPayload) {
+export async function sendToTelegram(payload: TelegramLeadPayload) {
   const res = await fetch("/api/telegram", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -26,18 +28,32 @@ export async function sendToTelegram(payload: TelegramPayload) {
   return data;
 }
 
-export function getTelegramPayloadFromForm(form: HTMLFormElement): TelegramPayload {
+function getFormValue(fd: FormData, name: string) {
+  const raw = fd.get(name);
+  return typeof raw === "string" ? raw.trim() : String(raw ?? "").trim();
+}
+
+export function getTelegramPayloadFromForm(form: HTMLFormElement): TelegramLeadPayload {
   const fd = new FormData(form);
 
-  const name = String(fd.get("name") ?? "").trim();
-  const phone = String(fd.get("phone") ?? "").trim();
-  const product = String(fd.get("product") ?? "").trim();
-  const email = String(fd.get("email") ?? "").trim();
+  const name = getFormValue(fd, "name");
+  const phone = getFormValue(fd, "phone");
+  const product = getFormValue(fd, "product");
+  const company = getFormValue(fd, "company");
+  const email = getFormValue(fd, "email");
+  const message = getFormValue(fd, "message");
 
   if (!name) throw new Error("Поле «Имя» обязательно");
   if (!phone) throw new Error("Поле «Телефон» обязательно");
   if (!product) throw new Error("Поле «Товар» обязательно");
 
-  return { name, phone, product, ...(email ? { email } : {}) };
+  return {
+    name,
+    phone,
+    product,
+    ...(company ? { company } : {}),
+    ...(email ? { email } : {}),
+    ...(message ? { message } : {}),
+  };
 }
 

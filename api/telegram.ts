@@ -3,9 +3,17 @@ type TelegramRequestBody = {
   phone?: unknown;
   product?: unknown;
   email?: unknown;
+  company?: unknown;
+  message?: unknown;
 };
 
 function asNonEmptyString(value: unknown) {
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : null;
+}
+
+function asOptionalString(value: unknown) {
   if (typeof value !== "string") return null;
   const trimmed = value.trim();
   return trimmed.length > 0 ? trimmed : null;
@@ -33,20 +41,27 @@ export default async function handler(req: any, res: any) {
   const name = asNonEmptyString(body.name);
   const phone = asNonEmptyString(body.phone);
   const product = asNonEmptyString(body.product);
-  const email = asNonEmptyString(body.email);
+  const company = asOptionalString(body.company);
+  const email = asOptionalString(body.email);
+  const message = asOptionalString(body.message);
 
   if (!name || !phone || !product) {
     res.status(400).json({ ok: false, error: "Missing required fields" });
     return;
   }
 
+  const companyText = company ? escapeText(company) : "Не указано";
+  const emailText = email ? escapeText(email) : "Не указано";
+  const messageText = message ? escapeText(message) : "Не указано";
+
   const text = [
-    "Новая заявка с сайта",
-    "",
-    `Имя: ${escapeText(name)}`,
-    `Телефон: ${escapeText(phone)}`,
-    `Email: ${email ? escapeText(email) : "Не указан"}`,
-    `Товар: ${escapeText(product)}`,
+    "🚀 НОВАЯ ЗАЯВКА KAZPROTECT",
+    `👤 Имя: ${escapeText(name)}`,
+    `📞 Телефон: ${escapeText(phone)}`,
+    `🏢 Компания: ${companyText}`,
+    `📧 Email: ${emailText}`,
+    `📦 Товар/Интерес: ${escapeText(product)}`,
+    `📝 Задача/Детали: ${messageText}`,
   ].join("\n");
 
   try {
