@@ -124,7 +124,6 @@ export const Contact = () => {
             <div>
               <label className="mb-1.5 block text-sm font-medium text-primary-foreground/90">Email</label>
               <Input
-                required
                 name="email"
                 type="email"
                 placeholder="info@example.kz"
