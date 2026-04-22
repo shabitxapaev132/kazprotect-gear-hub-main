@@ -19,7 +19,7 @@ const Index = () => {
         <Hero />
         <About />
         <Industries />
-        <QuizConsultant />
+       
 
         {/* Catalog teaser */}
         <section className="bg-background py-20 md:py-28">
