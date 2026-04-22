@@ -5,9 +5,9 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { Hero } from "@/components/site/Hero";
 import { About } from "@/components/site/About";
 import { Industries } from "@/components/site/Industries";
-import { QuizConsultant } from "@/components/site/QuizConsultant";
 import { Button } from "@/components/ui/button";
 import { categories, products } from "@/data/catalog";
+import { SmartQuiz } from "@/components/site/SmartQuiz";
 
 const Index = () => {
   const featured = products.slice(0, 3);
@@ -19,7 +19,6 @@ const Index = () => {
         <Hero />
         <About />
         <Industries />
-        <QuizConsultant />
 
         {/* Catalog teaser */}
         <section className="bg-background py-20 md:py-28">
@@ -36,6 +35,8 @@ const Index = () => {
                 комплектов ТОК-600.
               </p>
             </div>
+
+            <SmartQuiz />
 
             <div className="mb-10 flex flex-wrap justify-center gap-2">
               {categories.map((c) => (
