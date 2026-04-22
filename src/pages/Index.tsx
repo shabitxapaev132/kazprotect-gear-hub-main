@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { Hero } from "@/components/site/Hero";
 import { About } from "@/components/site/About";
 import { Industries } from "@/components/site/Industries";
+import { QuizConsultant } from "@/components/site/QuizConsultant";
 import { Button } from "@/components/ui/button";
 import { categories, products } from "@/data/catalog";
 
@@ -18,6 +19,7 @@ const Index = () => {
         <Hero />
         <About />
         <Industries />
+        <QuizConsultant />
 
         {/* Catalog teaser */}
         <section className="bg-background py-20 md:py-28">
